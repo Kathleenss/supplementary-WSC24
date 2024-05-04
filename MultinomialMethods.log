@@ -1,0 +1,402 @@
+----------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  C:\Users\sergiobaronam\Desktop\Congreso_CCTT\MultinomialMethods2.log
+  log type:  text
+ opened on:  23 Jan 2024, 13:28:11
+
+. 
+. // Importar base de datos
+. import excel "ChoiceDS.final.xlsx", sheet("Sheet1") firstrow
+(20 vars, 2,298 obs)
+
+. 
+. // Convertir variables categóricas 
+. encode mode, gen(mainmode)
+
+. encode sexo, gen(sex)
+
+. encode edad, gen(age)
+
+. encode status, gen(ses)
+
+. encode ocupacion, gen(occup)
+
+. encode distancia_promedio, gen(dist)
+
+. encode tiempo_promedio, gen(time)
+
+. 
+. drop mode sexo edad status ocupacion distancia_promedio tiempo_promedio
+
+. 
+. // Create choice data set
+. cmset id mainmode
+
+     Case ID variable: idcase
+Alternatives variable: mainmode
+
+. 
+. // Modelo logit multinomial - condicional
+. cmclogit choice costo accidente delincuencia confort emision, casevars(costo_factor accidente_factor del
+> incuencia_factor confort_factor emisiones_factor i.sex i.age i.ses i.occup i.time) base(3)
+note: variable costo has 59 cases that are not alternative-specific; there is no within-case
+      variability.
+note: variable accidente has 77 cases that are not alternative-specific; there is no within-case
+      variability.
+note: variable delincuencia has 102 cases that are not alternative-specific; there is no within-case
+      variability.
+note: variable confort has 57 cases that are not alternative-specific; there is no within-case
+      variability.
+note: variable emision has 104 cases that are not alternative-specific; there is no within-case
+      variability.
+
+Iteration 0:   log likelihood = -472.98407  
+Iteration 1:   log likelihood = -439.10269  
+Iteration 2:   log likelihood = -421.41616  
+Iteration 3:   log likelihood = -420.97868  
+Iteration 4:   log likelihood = -420.97673  
+Iteration 5:   log likelihood = -420.97673  
+
+Conditional logit choice model                 Number of obs      =      2,298
+Case ID variable: idcase                       Number of cases    =        766
+
+Alternatives variable: mainmode                Alts per case: min =          3
+                                                              avg =        3.0
+                                                              max =          3
+
+                                                  Wald chi2(27)   =     307.56
+Log likelihood = -420.97673                       Prob > chi2     =     0.0000
+
+-------------------------------------------------------------------------------------
+             choice | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+--------------------+----------------------------------------------------------------
+mainmode            |
+              costo |  -.2150137   .0709012    -3.03   0.002    -.3539774   -.0760499
+          accidente |  -.1199242   .0678719    -1.77   0.077    -.2529506    .0131022
+       delincuencia |  -.0702175   .0698077    -1.01   0.314     -.207038     .066603
+            confort |   .3120669   .0660814     4.72   0.000     .1825497     .441584
+            emision |  -.1445907   .0619848    -2.33   0.020    -.2660786   -.0231028
+--------------------+----------------------------------------------------------------
+Auto                |
+       costo_factor |  -.7152505   .1488597    -4.80   0.000     -1.00701   -.4234908
+   accidente_factor |   .2412887   .1473472     1.64   0.102    -.0475064    .5300839
+delincuencia_factor |   .4809944    .162439     2.96   0.003     .1626198    .7993689
+     confort_factor |   1.142556   .1407861     8.12   0.000     .8666206    1.418492
+   emisiones_factor |  -.4376525   .1355152    -3.23   0.001    -.7032575   -.1720476
+                    |
+                sex |
+              Male  |    .499248   .2713821     1.84   0.066    -.0326512    1.031147
+                    |
+                age |
+          [15, 30)  |  -1.485384   .5312739    -2.80   0.005    -2.526662   -.4441061
+                    |
+                ses |
+              bajo  |  -3.538943   .4648627    -7.61   0.000    -4.450058   -2.627829
+             medio  |   -1.76534   .3855196    -4.58   0.000    -2.520944   -1.009735
+                    |
+              occup |
+        Estudiante  |  -.2675445   .5129252    -0.52   0.602    -1.272859    .7377705
+                    |
+               time |
+              > 30  |  -1.425634   .2973705    -4.79   0.000     -2.00847   -.8427988
+              _cons |   1.015327   .7361631     1.38   0.168    -.4275267     2.45818
+--------------------+----------------------------------------------------------------
+Motocicleta         |
+       costo_factor |   .1653466    .132165     1.25   0.211    -.0936921    .4243853
+   accidente_factor |  -.2159219   .1483952    -1.46   0.146    -.5067711    .0749272
+delincuencia_factor |   -.141289   .1548844    -0.91   0.362    -.4448568    .1622788
+     confort_factor |   .3108813   .1299646     2.39   0.017     .0561554    .5656073
+   emisiones_factor |   .1038247   .1329841     0.78   0.435    -.1568194    .3644688
+                    |
+                sex |
+              Male  |   .5970341   .2710347     2.20   0.028     .0658157    1.128252
+                    |
+                age |
+          [15, 30)  |  -.1509768   .4584241    -0.33   0.742    -1.049472     .747518
+                    |
+                ses |
+              bajo  |   .8246307   .5132061     1.61   0.108    -.1812348    1.830496
+             medio  |   .3234542   .4897648     0.66   0.509    -.6364673    1.283376
+                    |
+              occup |
+        Estudiante  |  -2.201049    .442123    -4.98   0.000    -3.067594   -1.334504
+                    |
+               time |
+              > 30  |    -2.3527   .2939313    -8.00   0.000    -2.928795   -1.776605
+              _cons |   1.023757   .7556003     1.35   0.175    -.4571925    2.504706
+--------------------+----------------------------------------------------------------
+SITM                |  (base alternative)
+-------------------------------------------------------------------------------------
+
+. 
+.  test [Auto]2.sex [Motocicleta]2.sex
+
+ ( 1)  [Auto]2.sex = 0
+ ( 2)  [Motocicleta]2.sex = 0
+
+           chi2(  2) =    5.65
+         Prob > chi2 =    0.0594
+
+.  test [Auto]2.age [Motocicleta]2.age
+
+ ( 1)  [Auto]2.age = 0
+ ( 2)  [Motocicleta]2.age = 0
+
+           chi2(  2) =    9.10
+         Prob > chi2 =    0.0106
+
+.  test 2.ses 3.ses
+
+ ( 1)  [Auto]2.ses = 0
+ ( 2)  [Motocicleta]2.ses = 0
+ ( 3)  [Auto]3.ses = 0
+ ( 4)  [Motocicleta]3.ses = 0
+
+           chi2(  4) =   93.52
+         Prob > chi2 =    0.0000
+
+.  test costo_factor
+
+ ( 1)  [Auto]costo_factor = 0
+ ( 2)  [Motocicleta]costo_factor = 0
+
+           chi2(  2) =   33.89
+         Prob > chi2 =    0.0000
+
+.  test accidente_factor
+
+ ( 1)  [Auto]accidente_factor = 0
+ ( 2)  [Motocicleta]accidente_factor = 0
+
+           chi2(  2) =    9.04
+         Prob > chi2 =    0.0109
+
+.  test delincuencia_factor
+
+ ( 1)  [Auto]delincuencia_factor = 0
+ ( 2)  [Motocicleta]delincuencia_factor = 0
+
+           chi2(  2) =   14.94
+         Prob > chi2 =    0.0006
+
+.  test confort_factor
+
+ ( 1)  [Auto]confort_factor = 0
+ ( 2)  [Motocicleta]confort_factor = 0
+
+           chi2(  2) =   67.36
+         Prob > chi2 =    0.0000
+
+.  test emisiones_factor
+
+ ( 1)  [Auto]emisiones_factor = 0
+ ( 2)  [Motocicleta]emisiones_factor = 0
+
+           chi2(  2) =   16.50
+         Prob > chi2 =    0.0003
+
+.  
+.  // Modelo probit multinomial
+.  cmmprobit choice costo accidente delincuencia confort emision, casevars(costo_factor accidente_factor d
+> elincuencia_factor confort_factor emisiones_factor i.sex i.age i.ses i.occup i.time) base(3)
+note: variable costo has 59 cases that are not alternative-specific; there is no within-case
+      variability.
+note: variable accidente has 77 cases that are not alternative-specific; there is no within-case
+      variability.
+note: variable delincuencia has 102 cases that are not alternative-specific; there is no within-case
+      variability.
+note: variable confort has 57 cases that are not alternative-specific; there is no within-case
+      variability.
+note: variable emision has 104 cases that are not alternative-specific; there is no within-case
+      variability.
+
+Iteration 0:   log simulated-likelihood = -423.09723  
+Iteration 1:   log simulated-likelihood = -423.02818  (backed up)
+Iteration 2:   log simulated-likelihood = -422.97143  (backed up)
+Iteration 3:   log simulated-likelihood = -422.65402  (backed up)
+Iteration 4:   log simulated-likelihood = -422.60286  (backed up)
+Iteration 5:   log simulated-likelihood = -422.53188  (backed up)
+Iteration 6:   log simulated-likelihood =  -422.4799  (backed up)
+Iteration 7:   log simulated-likelihood = -422.46156  (backed up)
+Iteration 8:   log simulated-likelihood = -422.44209  (backed up)
+Iteration 9:   log simulated-likelihood = -422.41715  (backed up)
+Iteration 10:  log simulated-likelihood = -422.41039  
+Iteration 11:  log simulated-likelihood = -422.37386  (backed up)
+Iteration 12:  log simulated-likelihood = -422.31336  (backed up)
+Iteration 13:  log simulated-likelihood = -422.25716  (backed up)
+Iteration 14:  log simulated-likelihood = -422.25364  
+Iteration 15:  log simulated-likelihood = -422.23239  (backed up)
+Iteration 16:  log simulated-likelihood = -422.22768  
+Iteration 17:  log simulated-likelihood = -422.18715  
+Iteration 18:  log simulated-likelihood =  -422.1338  
+Iteration 19:  log simulated-likelihood = -422.11517  
+Iteration 20:  log simulated-likelihood = -422.10063  
+Iteration 21:  log simulated-likelihood = -422.07749  
+Iteration 22:  log simulated-likelihood = -422.04704  
+Iteration 23:  log simulated-likelihood = -422.03283  
+Iteration 24:  log simulated-likelihood = -422.01634  
+Iteration 25:  log simulated-likelihood = -422.01022  
+Iteration 26:  log simulated-likelihood = -422.00253  
+Iteration 27:  log simulated-likelihood =  -421.9831  
+Iteration 28:  log simulated-likelihood = -421.97308  
+Iteration 29:  log simulated-likelihood = -421.97069  
+Iteration 30:  log simulated-likelihood = -421.96581  
+Iteration 31:  log simulated-likelihood =   -421.964  
+Iteration 32:  log simulated-likelihood = -421.96203  
+Iteration 33:  log simulated-likelihood = -421.96107  
+Iteration 34:  log simulated-likelihood = -421.96093  
+Iteration 35:  log simulated-likelihood = -421.96091  
+Iteration 36:  log simulated-likelihood = -421.96091  
+
+Multinomial probit choice model                Number of obs      =      2,298
+Case ID variable: idcase                       Number of cases    =        766
+
+Alternatives variable: mainmode                Alts per case: min =          3
+                                                              avg =        3.0
+                                                              max =          3
+Integration sequence:      Hammersley
+Integration points:               663             Wald chi2(27)   =     186.48
+Log simulated-likelihood = -421.96091             Prob > chi2     =     0.0000
+
+-------------------------------------------------------------------------------------
+             choice | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+--------------------+----------------------------------------------------------------
+mainmode            |
+              costo |   -.161951   .0535045    -3.03   0.002    -.2668179    -.057084
+          accidente |  -.0583632   .0496086    -1.18   0.239    -.1555943     .038868
+       delincuencia |  -.0758745   .0476725    -1.59   0.111    -.1693109    .0175619
+            confort |   .2168592   .0593655     3.65   0.000      .100505    .3332133
+            emision |  -.0959581    .042385    -2.26   0.024    -.1790311    -.012885
+--------------------+----------------------------------------------------------------
+Auto                |
+       costo_factor |  -.4475951   .1173429    -3.81   0.000    -.6775829   -.2176072
+   accidente_factor |    .157029   .1075325     1.46   0.144    -.0537308    .3677889
+delincuencia_factor |    .329419   .1208623     2.73   0.006     .0925333    .5663046
+     confort_factor |   .8083955    .107232     7.54   0.000     .5982247    1.018566
+   emisiones_factor |  -.3131722   .1019103    -3.07   0.002    -.5129127   -.1134317
+                    |
+                sex |
+              Male  |   .3528181   .1977382     1.78   0.074    -.0347415    .7403778
+                    |
+                age |
+          [15, 30)  |  -1.061739   .3716642    -2.86   0.004    -1.790187   -.3332902
+                    |
+                ses |
+              bajo  |  -2.574349      .4106    -6.27   0.000     -3.37911   -1.769587
+             medio  |  -1.251586   .2896996    -4.32   0.000    -1.819386   -.6837847
+                    |
+              occup |
+        Estudiante  |  -.2325079   .4058247    -0.57   0.567     -1.02791    .5628939
+                    |
+               time |
+              > 30  |    -1.0437   .2761052    -3.78   0.000    -1.584856   -.5025434
+              _cons |   .7129887   .5931492     1.20   0.229    -.4495625     1.87554
+--------------------+----------------------------------------------------------------
+Motocicleta         |
+       costo_factor |   .0781286   .1061799     0.74   0.462    -.1299802    .2862374
+   accidente_factor |  -.1231918   .1039282    -1.19   0.236    -.3268873    .0805038
+delincuencia_factor |  -.0617397   .1157962    -0.53   0.594    -.2886961    .1652167
+     confort_factor |   .2579001   .1214506     2.12   0.034     .0198613    .4959388
+   emisiones_factor |   .0302008   .0983233     0.31   0.759    -.1625094     .222911
+                    |
+                sex |
+              Male  |   .3918738   .1957208     2.00   0.045     .0082682    .7754794
+                    |
+                age |
+          [15, 30)  |  -.1735579   .3298089    -0.53   0.599    -.8199714    .4728557
+                    |
+                ses |
+              bajo  |   .3546458   .4868756     0.73   0.466    -.5996129    1.308905
+             medio  |   .1242764   .3724312     0.33   0.739    -.6056753     .854228
+                    |
+              occup |
+        Estudiante  |  -1.444897   .4638785    -3.11   0.002    -2.354083   -.5357122
+                    |
+               time |
+              > 30  |  -1.578645   .3887847    -4.06   0.000    -2.340649    -.816641
+              _cons |   .8103845   .5813318     1.39   0.163    -.3290048    1.949774
+--------------------+----------------------------------------------------------------
+SITM                |  (base alternative)
+--------------------+----------------------------------------------------------------
+            /lnl2_2 |  -.0092458   .2816116    -0.03   0.974    -.5611944    .5427029
+--------------------+----------------------------------------------------------------
+              /l2_1 |   .7616266   .3520077     2.16   0.030     .0717041    1.451549
+-------------------------------------------------------------------------------------
+(mainmode=SITM is the alternative normalizing location)
+(mainmode=Auto is the alternative normalizing scale)
+
+.  
+.  test [Auto]2.sex [Motocicleta]2.sex
+
+ ( 1)  [Auto]2.sex = 0
+ ( 2)  [Motocicleta]2.sex = 0
+
+           chi2(  2) =    4.61
+         Prob > chi2 =    0.0998
+
+.  test [Auto]2.age [Motocicleta]2.age
+
+ ( 1)  [Auto]2.age = 0
+ ( 2)  [Motocicleta]2.age = 0
+
+           chi2(  2) =    8.90
+         Prob > chi2 =    0.0117
+
+.  test 2.ses 3.ses
+
+ ( 1)  [Auto]2.ses = 0
+ ( 2)  [Motocicleta]2.ses = 0
+ ( 3)  [Auto]3.ses = 0
+ ( 4)  [Motocicleta]3.ses = 0
+
+           chi2(  4) =   39.51
+         Prob > chi2 =    0.0000
+
+.  test costo_factor
+
+ ( 1)  [Auto]costo_factor = 0
+ ( 2)  [Motocicleta]costo_factor = 0
+
+           chi2(  2) =   15.54
+         Prob > chi2 =    0.0004
+
+.  test accidente_factor
+
+ ( 1)  [Auto]accidente_factor = 0
+ ( 2)  [Motocicleta]accidente_factor = 0
+
+           chi2(  2) =    5.92
+         Prob > chi2 =    0.0518
+
+.  test delincuencia_factor
+
+ ( 1)  [Auto]delincuencia_factor = 0
+ ( 2)  [Motocicleta]delincuencia_factor = 0
+
+           chi2(  2) =   10.89
+         Prob > chi2 =    0.0043
+
+.  test confort_factor
+
+ ( 1)  [Auto]confort_factor = 0
+ ( 2)  [Motocicleta]confort_factor = 0
+
+           chi2(  2) =   57.67
+         Prob > chi2 =    0.0000
+
+.  test emisiones_factor
+
+ ( 1)  [Auto]emisiones_factor = 0
+ ( 2)  [Motocicleta]emisiones_factor = 0
+
+           chi2(  2) =   11.40
+         Prob > chi2 =    0.0033
+
+.  
+. // Cerrar bitácora
+. log off
+      name:  <unnamed>
+       log:  C:\Users\sergiobaronam\Desktop\Congreso_CCTT\MultinomialMethods2.log
+  log type:  text
+ paused on:  23 Jan 2024, 13:30:13
+----------------------------------------------------------------------------------------------------------
